@@ -25,3 +25,4 @@
 
 ---
 *"Değerlerinizin transferinde güvenlik ve rahat takip konforu"*
+commit → push
