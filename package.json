@@ -1,0 +1,12 @@
+{
+  "name": "pakettakip-website",
+  "version": "1.0.0",
+  "description": "PaketTakip - Kurumsal Kurye Takip & Audit Log Sistemi",
+  "scripts": {
+    "dev": "python -m http.server 3000",
+    "build": "echo 'No build step needed for static HTML'"
+  },
+  "keywords": ["kurye", "takip", "lojistik", "audit-log"],
+  "author": "PaketTakip",
+  "license": "MIT"
+}
