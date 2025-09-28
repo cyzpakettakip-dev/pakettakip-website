@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PaketTakip: Kurumsal Kurye Takip & Audit Log Sistemi</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome (İkonlar için) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts (Inter) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <script>
+        // Tema Renkleri: Logonun ruhunu yansıtıyoruz
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'takip-sari': '#FFC107', // Ana Aksiyon Rengi
+                        'takip-gri': '#34495e',  // Ana Kurumsal Rengi
+                        'takip-bg': '#f5f7fa',   // Hafif Gri Arka Plan
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Smooth scroll ve ekstra animasyonlar */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Fade-in animasyonu */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease-out;
+        }
+        
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Pulse Glow animasyonu */
+        .pulse-glow {
+            animation: pulse-glow 2s infinite;
+        }
+        
+        @keyframes pulse-glow {
+            0% {
+                box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(255, 193, 7, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 193, 7, 0);
+            }
+        }
+
+        /* Modal'ın gizlenmesi için */
+        .modal-overlay {
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0s, opacity 0.3s ease;
+        }
+        .modal-overlay.active {
+            visibility: visible;
+            opacity: 1;
+        }
+        .modal-content-container {
+            /* Mobil uyum için alttan yukarı kayar */
+            transform: translateY(100%); 
+            transition: transform 0.3s ease-out;
+        }
+        .modal-overlay.active .modal-content-container {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="bg-takip-bg antialiased font-sans">
+
+    <!-- 1. HEADER / NAVİGASYON (MOBİLDE SADE) -->
+    <header class="bg-white shadow-lg sticky top-0 z-50 transition-all duration-300">
+        <div class="container mx-auto px-4 md:px-6 py-4 flex justify-between items-center">
+            <!-- Logo Alanı -->
+            <div class="flex items-center space-x-3">
+                <div class="relative">
+                    <i class="fas fa-route text-takip-sari text-3xl"></i>
+                    <div class="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full pulse-glow"></div>
+                </div>
+                <span class="text-2xl md:text-3xl font-extrabold text-takip-gri">PaketTakip</span>
+            </div>
+            <!-- Demo Talep Butonu -->
+            <a href="#contact" class="bg-takip-sari text-takip-gri font-bold py-2 px-4 md:px-6 rounded-full hover:bg-yellow-500 transition duration-300 shadow-md text-sm md:text-base transform hover:scale-105">
+                Demo Talep Et
+            </a>
+        </div>
+    </header>
+
+    <!-- 2. HERO SECTION (ANA BAŞLIK) -->
+    <main class="py-16 md:py-24">
+        <div class="container mx-auto px-4 md:px-6 text-center">
+            <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-takip-gri leading-snug mb-6 max-w-5xl mx-auto fade-in">
+                Lojistik Operasyonlarınızda <span class="text-takip-sari">Hukuki Güvence</span> ve Sıfır Hata
+            </h1>
+            <p class="text-lg md:text-xl text-gray-600 mb-10 max-w-3xl mx-auto fade-in">
+                PaketTakip, kurye takibini yasal geçerliliği olan anlık <strong>Sicil Kaydı (Audit Log)</strong> ile birleştirir. 
+                <strong class="text-takip-gri">Değerlerinizin transferinde güvenlik ve rahat takip konforunu yaşayın.</strong> Tüm teslimat süreçlerinizde tam şeffaflık.
+            </p>
+            
+            <!-- Ana Buton (Mobil için geniş) -->
+            <a href="#contact" class="inline-block bg-takip-gri text-white font-bold text-lg py-3 px-8 md:px-12 rounded-full hover:bg-gray-700 transition duration-300 shadow-2xl transform hover:scale-105 mb-8 fade-in pulse-glow">
+                Kurumsal Çözümlere Geçin
+            </a>
+
+            <!-- Mobil Mağaza Butonları Eklendi (Flex yapısı mobilde alt alta gelmez) -->
+            <div class="flex justify-center space-x-4 mb-16 fade-in">
+                <a href="[PLAY STORE LİNKİNİZ]" target="_blank" class="flex items-center bg-gray-800 text-white py-2 px-4 rounded-lg shadow-xl hover:bg-gray-700 transition duration-300 transform hover:scale-105">
+                    <i class="fab fa-google-play text-xl mr-2"></i>
+                    <span>Play Store</span>
+                </a>
+                <a href="[APP STORE LİNKİNİZ]" target="_blank" class="flex items-center bg-gray-800 text-white py-2 px-4 rounded-lg shadow-xl hover:bg-gray-700 transition duration-300 transform hover:scale-105">
+                    <i class="fab fa-apple text-xl mr-2"></i>
+                    <span>App Store</span>
+                </a>
+            </div>
+
+            <!-- Logo Görselinin Temsili Alanı -->
+            <div class="mt-16 fade-in">
+                <div class="relative w-48 h-48 sm:w-56 sm:h-56 mx-auto"> <!-- Boyutlar mobil için küçüldü -->
+                    <div class="absolute inset-0 bg-gradient-to-r from-takip-sari to-yellow-400 rounded-3xl shadow-2xl transform rotate-6"></div>
+                    <div class="absolute inset-0 bg-white rounded-3xl shadow-2xl flex flex-col items-center justify-center p-4">
+                        <i class="fas fa-route text-6xl text-takip-sari mb-4"></i>
+                        <span class="text-2xl font-extrabold text-takip-gri">PaketTakip</span>
+                        <span class="text-sm text-gray-500 mt-2">Kurumsal Logo</span>
+                    </div>
+                </div>
+                <p class="text-gray-500 text-sm mt-4">Logo yüklenirken geçici SAAS tasarım görüntüsü</p>
+            </div>
+        </div>
+    </main>
+    
+    <!-- 3. ÖZELLİKLER (MOBİLDE ALT ALTA KARTLAR) -->
+    <section class="bg-white py-16 md:py-20">
+        <div class="container mx-auto px-4 md:px-6">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-takip-gri mb-16 fade-in">PaketTakip'in Fark Yaratan Özellikleri</h2>
+
+            <!-- Grid mobil için 1 sütun, masaüstü için 3 sütun -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- ÖZELLİK KARTI 1: Hukuki Sicil Kaydı -->
+                <div class="p-6 bg-takip-bg rounded-xl shadow-lg transition duration-300 hover:shadow-2xl border-t-8 border-takip-sari transform hover:-translate-y-2 fade-in">
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-handshake text-4xl text-takip-sari mr-4"></i>
+                        <h3 class="text-xl font-bold text-takip-gri">Zaman Damgalı Sicil Kaydı</h3>
+                    </div>
+                    <p class="text-gray-600">Teslimatın ne zaman ve hangi koordinatta tamamlandığı anlık olarak kaydedilir. Hukuki anlaşmazlıklarda size kesin kanıt sunar.</p>
+                </div>
+
+                <!-- ÖZELLİK KARTI 2: Canlı Takip -->
+                <div class="p-6 bg-takip-bg rounded-xl shadow-lg transition duration-300 hover:shadow-2xl border-t-8 border-takip-sari transform hover:-translate-y-2 fade-in">
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-map-marked-alt text-4xl text-takip-sari mr-4"></i>
+                        <h3 class="text-xl font-bold text-takip-gri">7/24 Canlı Kurye İzleme</h3>
+                    </div>
+                    <p class="text-gray-600">Yönetici paneli üzerinden tüm kurye filonuzu gerçek zamanlı harita üzerinde izleyin. Verimliliği artırın, bekleme sürelerini sıfırlayın.</p>
+                </div>
+
+                <!-- ÖZELLİK KARTI 3: Multi-Tenant -->
+                <div class="p-6 bg-takip-bg rounded-xl shadow-lg transition duration-300 hover:shadow-2xl border-t-8 border-takip-sari transform hover:-translate-y-2 fade-in">
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-layer-group text-4xl text-takip-sari mr-4"></i>
+                        <h3 class="text-xl font-bold text-takip-gri">Multi-Tenant SAAS Modeli</h3>
+                    </div>
+                    <p class="text-gray-600">Her firma için izole edilmiş, güvenli ve ölçeklenebilir altyapı. Anında kurulum, sıfır sunucu maliyeti.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. MÜŞTERİ BAŞARI HİKAYELERİ (MOBİLDE 1 SÜTUN, MASAÜSTÜNDE 4) -->
+    <section class="py-16 md:py-20 bg-takip-bg">
+        <div class="container mx-auto px-4 md:px-6">
+            <header class="text-center mb-12 fade-in">
+                <h2 class="text-3xl md:text-4xl font-bold text-takip-gri mb-4">
+                    Başarı Hikayeleri: Uygulamamızla Güçlenenler
+                </h2>
+                <p class="text-lg text-gray-600">
+                    Dijital dönüşüm yolculuklarında bizimle ilerleyen, sektörlerinin lider firmaları.
+                </p>
+            </header>
+
+            <!-- Firma Tanıtım Kartları Gridi -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 max-w-7xl mx-auto">
+                
+                <!-- 1. Yıldız Holding -->
+                <div class="bg-white rounded-xl shadow-xl overflow-hidden transform transition duration-500 hover:scale-[1.03] hover:shadow-2xl hover:shadow-takip-sari/50 group border-t-4 border-takip-sari fade-in">
+                    <!-- Sektör Temsili Görsel Placeholder -->
+                    <div class="h-36 bg-cover bg-center flex items-center justify-center font-extrabold text-2xl text-white" 
+                         style="background-image: url('https://placehold.co/400x300/10b981/ffffff?text=GIDA+PERAKENDE');">
+                    </div>
+                    
+                    <div class="p-5">
+                        <h3 class="text-2xl font-bold text-takip-gri mb-1 group-hover:text-takip-sari transition duration-300">
+                            Yıldız Holding
+                        </h3>
+                        <span class="inline-block bg-takip-sari/30 text-takip-gri text-xs font-semibold px-2 py-0.5 rounded-full mb-3">
+                            Gıda ve İçecek Devi
+                        </span>
+                        <p class="text-gray-600 text-sm leading-snug">
+                            Operasyonel süreçlerini baştan sona <strong class="font-semibold text-takip-gri">optimize ederek</strong>, rekor verimlilik artışı sağladı.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 2. İNCİ Transformatör -->
+                <div class="bg-white rounded-xl shadow-xl overflow-hidden transform transition duration-500 hover:scale-[1.03] hover:shadow-2xl hover:shadow-takip-sari/50 group border-t-4 border-takip-sari fade-in">
+                    <!-- Sektör Temsili Görsel Placeholder -->
+                    <div class="h-36 bg-cover bg-center flex items-center justify-center font-extrabold text-2xl text-white" 
+                         style="background-image: url('https://placehold.co/400x300/f59e0b/ffffff?text=ENERJİ+%26+SANAYİ');">
+                    </div>
+                    
+                    <div class="p-5">
+                        <h3 class="text-2xl font-bold text-takip-gri mb-1 group-hover:text-takip-sari transition duration-300">
+                            İNCİ Transformatör
+                        </h3>
+                        <span class="inline-block bg-takip-sari/30 text-takip-gri text-xs font-semibold px-2 py-0.5 rounded-full mb-3">
+                            Enerji Çözümleri
+                        </span>
+                        <p class="text-gray-600 text-sm leading-snug">
+                            Karmaşık üretim takibi ve tedarik zincirini bizimle <strong class="font-semibold text-takip-gri">dijitalleştirerek</strong> hata payını sıfırladı.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 3. CYZ Yazılım -->
+                <div class="bg-white rounded-xl shadow-xl overflow-hidden transform transition duration-500 hover:scale-[1.03] hover:shadow-2xl hover:shadow-takip-sari/50 group border-t-4 border-takip-sari fade-in">
+                    <!-- Sektör Temsili Görsel Placeholder -->
+                    <div class="h-36 bg-cover bg-center flex items-center justify-center font-extrabold text-2xl text-white" 
+                         style="background-image: url('https://placehold.co/400x300/3b82f6/ffffff?text=YAZILIM+TEKNOLOJİ');">
+                    </div>
+                    
+                    <div class="p-5">
+                        <h3 class="text-2xl font-bold text-takip-gri mb-1 group-hover:text-takip-sari transition duration-300">
+                            CYZ Yazılım
+                        </h3>
+                        <span class="inline-block bg-takip-sari/30 text-takip-gri text-xs font-semibold px-2 py-0.5 rounded-full mb-3">
+                            İnovatif Yazılım
+                        </span>
+                        <p class="text-gray-600 text-sm leading-snug">
+                            Projelerinde <strong class="font-semibold text-takip-gri">hız ve çevikliği</strong> yakalamak için entegre çözümümüzü kullanarak geliştirme süreçlerini kısalttı.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 4. Can Gümrük -->
+                <div class="bg-white rounded-xl shadow-xl overflow-hidden transform transition duration-500 hover:scale-[1.03] hover:shadow-2xl hover:shadow-takip-sari/50 group border-t-4 border-takip-sari fade-in">
+                    <!-- Sektör Temsili Görsel Placeholder -->
+                    <div class="h-36 bg-cover bg-center flex items-center justify-center font-extrabold text-2xl text-white" 
+                         style="background-image: url('https://placehold.co/400x300/ef4444/ffffff?text=GÜMRÜK+MÜŞAVİRLİĞİ');">
+                    </div>
+                    
+                    <div class="p-5">
+                        <h3 class="text-2xl font-bold text-takip-gri mb-1 group-hover:text-takip-sari transition duration-300">
+                            Can Gümrük
+                        </h3>
+                        <span class="inline-block bg-takip-sari/30 text-takip-gri text-xs font-semibold px-2 py-0.5 rounded-full mb-3">
+                            Gümrük Müşavirliği
+                        </span>
+                        <p class="text-gray-600 text-sm leading-snug">
+                            Gümrük süreçlerinde <strong class="font-semibold text-takip-gri">şeffaflık ve otomasyon</strong> için çözümümüzü tercih ederek işlem süresini yarıya indirdi.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. İŞ AKIŞI GÖRSELLERİ (MOBİLDE SÜTUNLAR DAHA DAR) -->
+    <section class="py-16 md:py-20 bg-takip-gri text-white">
+        <div class="container mx-auto px-4 md:px-6">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-16 fade-in">Nasıl Çalışır?</h2>
+            
+            <!-- Grid mobil için 2 sütun, masaüstü için 4 sütun -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-5xl mx-auto">
+                <!-- Adım 1 -->
+                <div class="text-center fade-in p-2 sm:p-4">
+                    <div class="bg-white text-takip-gri w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-xl sm:text-2xl font-bold shadow-lg transform hover:scale-110 transition duration-300">1</div>
+                    <h3 class="text-lg sm:text-xl font-semibold mb-2">Kurye Atama</h3>
+                    <p class="text-gray-300 text-sm">Teslimat görevini kuryeye atayın</p>
+                </div>
+                
+                <!-- Adım 2 -->
+                <div class="text-center fade-in p-2 sm:p-4">
+                    <div class="bg-white text-takip-gri w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-xl sm:text-2xl font-bold shadow-lg transform hover:scale-110 transition duration-300">2</div>
+                    <h3 class="text-lg sm:text-xl font-semibold mb-2">Canlı Takip</h3>
+                    <p class="text-gray-300 text-sm">Harita üzerinden anlık konum takibi</p>
+                </div>
+                
+                <!-- Adım 3 -->
+                <div class="text-center fade-in p-2 sm:p-4">
+                    <div class="bg-white text-takip-gri w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-xl sm:text-2xl font-bold shadow-lg transform hover:scale-110 transition duration-300">3</div>
+                    <h3 class="text-lg sm:text-xl font-semibold mb-2">Teslimat Onayı</h3>
+                    <p class="text-gray-300 text-sm">Müşteri onayı ile teslimat tamamlanır</p>
+                </div>
+                
+                <!-- Adım 4 -->
+                <div class="text-center fade-in p-2 sm:p-4">
+                    <div class="bg-white text-takip-gri w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-xl sm:text-2xl font-bold shadow-lg transform hover:scale-110 transition duration-300">4</div>
+                    <h3 class="text-lg sm:text-xl font-semibold mb-2">Sicil Kaydı</h3>
+                    <p class="text-gray-300 text-sm">Zaman damgalı kayıt oluşturulur</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. İLETİŞİM FORMU -->
+    <section id="contact" class="py-16 md:py-20 bg-white">
+        <div class="container mx-auto px-4 md:px-6">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-takip-gri mb-12 fade-in">Kurumsal Demo Talebi</h2>
+            <div class="max-w-xl mx-auto bg-takip-bg p-8 md:p-10 rounded-xl shadow-2xl fade-in">
+                <p class="text-center text-gray-600 mb-6 font-semibold">Kurumsal hesap yöneticimiz en kısa sürede sizinle iletişime geçecektir.</p>
+                
+                <form onsubmit="handleFormSubmit(event)">
+                    <div class="mb-4">
+                        <label for="firmaAdi" class="block text-sm font-medium text-gray-700">Firma Adı</label>
+                        <input type="text" id="firmaAdi" name="firmaAdi" required class="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm p-3 focus:ring-takip-sari focus:border-takip-sari transition duration-300">
+                    </div>
+                    <div class="mb-4">
+                        <label for="eposta" class="block text-sm font-medium text-gray-700">Kurumsal E-postanız</label>
+                        <input type="email" id="eposta" name="eposta" required class="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm p-3 focus:ring-takip-sari focus:border-takip-sari transition duration-300">
+                    </div>
+                    <div class="mb-6">
+                        <label for="kuryeSayisi" class="block text-sm font-medium text-gray-700">Tahmini Kurye Sayısı</label>
+                        <input type="number" id="kuryeSayisi" name="kuryeSayisi" required class="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm p-3 focus:ring-takip-sari focus:border-takip-sari transition duration-300" min="1">
+                    </div>
+                    
+                    <button type="submit" class="w-full bg-takip-sari text-takip-gri font-bold py-3 rounded-lg hover:bg-yellow-500 transition duration-300 shadow-lg text-lg transform hover:scale-105">
+                        Demo Talebini Gönder
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. İLETİŞİM BİLGİLERİ (MOBİLDE ALT ALTA HİZALANIR) -->
+    <section class="bg-takip-gri py-12 md:py-16 text-white">
+        <div class="container mx-auto px-4 md:px-6">
+            <h3 class="text-2xl font-bold text-center mb-8 fade-in">Bize Ulaşın</h3>
+            
+            <!-- Grid mobil için 1 sütun (alt alta), masaüstü için 3 sütun (yan yana) -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                <!-- Adres -->
+                <div class="flex flex-col items-center text-center fade-in">
+                    <i class="fas fa-building text-3xl text-takip-sari mb-3"></i>
+                    <h4 class="text-xl font-semibold mb-2">Kurumsal Adres</h4>
+                    <p class="text-gray-300">Teknopark İstanbul, Kuluçka Merkezi</p>
+                    <p class="text-gray-300">Yenilenebilir Enerji Binası Kat: 5 No: 501</p>
+                    <p class="text-gray-300">34906 Pendik/İstanbul</p>
+                </div>
+
+                <!-- Telefon -->
+                <div class="flex flex-col items-center text-center fade-in">
+                    <i class="fas fa-phone text-3xl text-takip-sari mb-3"></i>
+                    <h4 class="text-xl font-semibold mb-2">Telefon Hattı</h4>
+                    <p class="text-white font-bold text-lg">0850 444 00 99</p>
+                    <p class="text-gray-300 text-sm">(Hafta içi 09:00 - 18:00)</p>
+                </div>
+
+                <!-- E-posta -->
+                <div class="flex flex-col items-center text-center fade-in">
+                    <i class="fas fa-envelope text-3xl text-takip-sari mb-3"></i>
+                    <h4 class="text-xl font-semibold mb-2">Kurumsal E-posta</h4>
+                    <p class="text-gray-300">satis@pakettakip.com.tr</p>
+                    <p class="text-gray-300">destek@pakettakip.com.tr</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. ALT BİLGİ (FOOTER) -->
+    <footer class="bg-gray-800 py-6 text-white">
+        <div class="container mx-auto px-6 text-center text-sm">
+            <p>&copy; 2025 PaketTakip - Kurumsal Kurye ve Evrak Takip Çözümleri. Tüm Hakları Saklıdır.</p>
+            <!-- Linkler mobil için otomatik kayar (satır içi blok) -->
+            <div class="mt-2 flex flex-wrap justify-center gap-x-4 gap-y-2">
+                <a href="javascript:void(0)" onclick="openLegalModal('about_us')" class="text-gray-400 hover:text-takip-sari transition duration-300">Biz Kimiz</a>
+                <a href="javascript:void(0)" onclick="openLegalModal('privacy')" class="text-gray-400 hover:text-takip-sari transition duration-300">Gizlilik Politikası</a>
+                <a href="javascript:void(0)" onclick="openLegalModal('terms')" class="text-gray-400 hover:text-takip-sari transition duration-300">Kullanım Şartları</a>
+                <a href="javascript:void(0)" onclick="openLegalModal('kvkk')" class="text-gray-400 hover:text-takip-sari transition duration-300">KVKK Aydınlatma</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- MODAL YAPISI (YASAL METİNLER VE BİZ KİMİZ İÇİN) -->
+    <!-- Modal mobil cihazlarda ekranın %90'ını kaplayacak şekilde ayarlandı (max-w-full sm:max-w-4xl) -->
+    <div id="legal-modal-overlay" class="modal-overlay fixed inset-0 z-[9999] bg-gray-900 bg-opacity-80 flex items-end justify-center">
+        <!-- Modal İçerik Konteyneri -->
+        <div class="modal-content-container bg-white w-full max-w-4xl max-h-[90vh] rounded-t-xl overflow-hidden shadow-2xl">
+            <!-- Modal Başlık (Header) -->
+            <div class="flex justify-between items-center p-5 border-b border-gray-200 sticky top-0 bg-white z-10">
+                <h2 id="modal-title" class="text-2xl font-bold text-takip-gri"></h2>
+                <button onclick="closeLegalModal()" class="text-gray-500 hover:text-red-500 transition duration-300">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+            <!-- Modal Gövdesi (Body) -->
+            <div id="modal-body-content" class="p-6 overflow-y-auto prose prose-lg" style="max-height: calc(90vh - 70px);">
+                <!-- İçerik buraya JS ile yüklenecek -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Yasal Metin İçerikleri (HTML Formatında)
+        const legalContents = {
+            // YENİ EKLEME: BİZ KİMİZ VE VİZYONUMUZ
+            about_us: {
+                title: "Biz Kimiz ve Vizyonumuz",
+                content: `
+                    <h3 class="text-2xl font-bold text-takip-sari mb-4">Lojistikte Hukuki Güvencenin Mimarları</h3>
+                    <p class="mb-4 text-gray-700">PaketTakip, sadece bir kurye takip uygulaması değil, Türkiye'nin en kritik lojistik operasyonlarını hukuki güvence altına alan bir teknoloji firmasıdır. **Teknopark İstanbul'da** doğduk ve SAAS (Hizmet Olarak Yazılım) alanında yıllarca deneyim kazanmış, yüksek motivasyonlu bir ekip tarafından kurulduk.</p>
+
+                    <h4 class="text-xl font-bold text-takip-gri mt-6 mb-3">Bizim Farkımız: Sicil Kaydı (Audit Log)</h4>
+                    <p class="mb-4 text-gray-700">Bizi rakiplerimizden ayıran en büyük özellik, basit takibin ötesinde **Zaman Damgalı Sicil Kaydı (Audit Log)** sistemine odaklanmamızdır. Biz, size sadece kuryenin anlık konumunu değil, yarın olası bir hukuki anlaşmazlıkta kullanabileceğiniz, **yasal geçerliliği olan kesin deliller** sunuyoruz.</p>
+
+                    <ul class="list-disc list-inside space-y-2 text-gray-700 ml-4">
+                        <li><strong>Vizyonumuz:</strong> Lojistik sektöründe "hata payı sıfır" bir ekosistem yaratmaktır.</li>
+                        <li><strong>Misyonumuz:</strong> Her evrak, her paket ve her teslimatın dijital olarak imzalanmış, zaman damgalı bir sicil kaydına sahip olmasını sağlamaktır.</li>
+                        <li><strong>Taahhüdümüz:</strong> PaketTakip'i seçerek, sadece bir yazılım değil, operasyonel mükemmellik ve kurumsal güvence taahhüdü almış olursunuz.</li>
+                    </ul>
+                    <p class="mt-6 font-semibold text-takip-gri">Biz, sektörün sorunlarına sadece çözüm getirmeyi değil, sektöre yeni bir **güven standardı** getirmeyi amaçlıyoruz.</p>
+                `
+            },
+            privacy: {
+                title: "Gizlilik Politikası",
+                content: `
+                    <p class="mb-4"><strong>Son Güncelleme Tarihi: 28 Eylül 2025</strong></p>
+                    <p class="mb-6">PaketTakip ("Şirket") olarak, hizmetlerimizi kullanırken verilerinizin gizliliğini ciddiye alıyor ve kişisel verilerinizi korumayı taahhüt ediyoruz. Bu Gizlilik Politikası, hizmetlerimizi kullanırken topladığımız, kullandığımız ve paylaştığımız kişisel veri türlerini açıklamaktadır.</p>
+
+                    <h3 class="text-xl font-bold text-takip-gri mt-6 mb-3">1. Toplanan Veri Türleri</h3>
+                    <p class="mb-4">Hizmetlerimizi sağlarken aşağıdaki kişisel verileri toplayabiliriz:</p>
+                    <ul class="list-disc list-inside space-y-2 text-gray-700 ml-4">
+                        <li><strong>Kurumsal Veriler:</strong> Firma adı, yetkili kişinin adı, e-posta adresi ve fatura bilgileri.</li>
+                        <li><strong>Kurye ve Kullanıcı Verileri:</strong> Kuryelerin ve yönetici panel kullanıcılarının adları, e-posta adresleri, telefon numaraları ve kullanıcı kimlikleri.</li>
+                        <li><strong>Konum Verileri:</strong> Mobil uygulama kullanıcılarının (kuryelerin) görev sırasında hizmetin sağlanması amacıyla GPS konum bilgileri anlık olarak toplanır ve kaydedilir. Bu veri, <strong>Audit Log (Sicil Kaydı)</strong> sistemimizin temelini oluşturur.</li>
+                        <li><strong>İşlem ve Sicil Kayıtları (Audit Log):</strong> Teslimat zamanı, coğrafi koordinatlar, işlem başarı/başarısızlık bilgileri ve bu verilerle ilişkilendirilen zaman damgalı sicil kayıtları.</li>
+                    </ul>
+
+                    <h3 class="text-xl font-bold text-takip-gri mt-6 mb-3">2. Verilerin Kullanım Amaçları</h3>
+                    <p class="mb-4">Topladığımız veriler, başlıca şu amaçlarla kullanılır:</p>
+                    <ul class="list-disc list-inside space-y-2 text-gray-700 ml-4">
+                        <li><strong>Hizmet Sunumu:</strong> Kurye takip, görev atama ve canlı izleme hizmetlerini sağlamak.</li>
+                        <li><strong>Hukuki Güvence:</strong> Teslimat ve işlem geçmişine ait yasal geçerliliği olan <strong>Audit Log (Sicil Kaydı)</strong> oluşturmak.</li>
+                        <li><strong>Güvenlik:</strong> Kullanıcı hesaplarının güvenliğini sağlamak ve yetkisiz erişimi önlemek.</li>
+                        <li><strong>İletişim:</strong> Hizmet güncellemeleri, fatura bilgileri ve teknik destek sağlamak.</li>
+                    </ul>
+
+                    <h3 class="text-xl font-bold text-takip-gri mt-6 mb-3">3. Veri Paylaşımı</h3>
+                    <p class="text-gray-700">Verileriniz, hizmetin sağlanması dışında üçüncü taraflarla paylaşılmaz, satılmaz veya kiralanmaz. Yasal bir yükümlülük, mahkeme kararı veya resmi bir talebin yerine getirilmesi gerektiği durumlar hariçtir.</p>
+                `
+            },
+            terms: {
+                title: "Kullanım Şartları",
+                content: `
+                    <p class="mb-4"><strong>Geçerlilik Tarihi: 28 Eylül 2025</strong></p>
+                    <p class="mb-6">PaketTakip ("Hizmet"), bir kurumsal kurye takip, evrak takip ve hukuki Sicil Kaydı (Audit Log) platformudur. Bu şartlar, Hizmetin kullanımı ve Şirketimiz ("Sağlayıcı") ile kullanıcı (Müşteri Firma) arasındaki yasal anlaşmayı düzenler.</p>
+
+                    <h3 class="text-xl font-bold text-takip-gri mt-6 mb-3">1. Hizmetin Kullanımı</h3>
+                    <ul class="list-disc list-inside space-y-2 text-gray-700 ml-4">
+                        <li><strong>Yetki:</strong> Hizmeti kullanmak için Müşteri Firma'nın yasal olarak yetkili temsilcisi olmanız veya firma adına hareket ediyor olmanız gerekmektedir.</li>
+                        <li><strong>Lisans:</strong> Sağlayıcı, Müşteri Firma'ya Hizmeti, yalnızca kurumsal lojistik operasyonları için kullanmak üzere sınırlı, devredilemez ve münhasır olmayan bir lisans verir.</li>
+                        <li><strong>Sorumluluk:</strong> Müşteri Firma, mobil uygulama kullanıcılarının (kuryelerin) konum verisi toplama konusunda bilgilendirilmesinden ve ilgili yasal izinlerin alınmasından tek başına sorumludur.</li>
+                    </ul>
+
+                    <h3 class="text-xl font-bold text-takip-gri mt-6 mb-3">2. Yasaklanmış Faaliyetler</h3>
+                    <p class="mb-4">Hizmet, yasalara aykırı veya ticari itibarımızı zedeleyecek faaliyetler için kullanılamaz. Müşteri, aşağıdaki faaliyetleri yapmayacağını kabul eder:</p>
+                    <ul class="list-disc list-inside space-y-2 text-gray-700 ml-4">
+                        <li>Hizmetin güvenliğini veya bütünlüğünü tehlikeye atmak.</li>
+                        <li>Hizmeti tersine mühendislik (reverse engineering) yoluyla çözmeye çalışmak.</li>
+                        <li>Hizmeti, kuryelerin izlenmesi dışındaki amaçlar için kullanmak.</li>
+                    </ul>
+                `
+            },
+            kvkk: {
+                title: "KVKK Aydınlatma Metni",
+                content: `
+                    <p class="mb-4"><strong>Veri Sorumlusu:</strong> [Firma Adınız/PaketTakip], Teknopark İstanbul (İletişim bilgileri için Footer'a bakınız).</p>
+
+                    <h3 class="text-xl font-bold text-takip-gri mt-6 mb-3">1. Kişisel Veri Toplamanın Yöntemi ve Hukuki Sebebi</h3>
+                    <p class="mb-4">Kişisel verileriniz, PaketTakip mobil ve web uygulamaları üzerinden elektronik ortamda ve otomatik yöntemlerle (Konum, İşlem Verisi, Kullanıcı Kayıtları) toplanmaktadır.</p>
+                    <p class="font-semibold text-takip-gri mt-4">Toplamanın hukuki sebepleri şunlardır:</p>
+                    <ul class="list-disc list-inside space-y-2 text-gray-700 ml-4">
+                        <li><strong>Sözleşmenin İfası:</strong> Hizmet Sözleşmesinin yerine getirilmesi (Kurye Takip ve Audit Log hizmetinin sağlanması).</li>
+                        <li><strong>Kanunen Açıkça Öngörülmesi:</strong> Yasal düzenlemelere (örneğin ticari defter kayıtları, vergi mevzuatı) uyum sağlanması.</li>
+                        <li><strong>Meşru Menfaat:</strong> Şirketimizin hukuki uyuşmazlıklarda delil sunabilmesi ve sistem güvenliğinin sağlanması.</li>
+                    </ul>
+
+                    <h3 class="text-xl font-bold text-takip-gri mt-6 mb-3">2. İşlenen Kişisel Veri Kategorileri ve Amaçları</h3>
+                    <div class="overflow-x-auto my-4">
+                        <table class="min-w-full bg-takip-bg border border-gray-300 rounded-lg">
+                            <thead>
+                                <tr class="bg-gray-200">
+                                    <th class="py-2 px-4 border-b font-semibold text-left text-sm">Veri Kategorisi</th>
+                                    <th class="py-2 px-4 border-b font-semibold text-left text-sm">İşleme Amacı</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b">
+                                    <td class="py-2 px-4"><strong>Kimlik ve İletişim</strong> (Ad, Soyad, E-posta, Telefon)</td>
+                                    <td class="py-2 px-4">Kullanıcı kaydı oluşturma, sözleşme yönetimi ve iletişim.</td>
+                                </tr>
+                                <tr class="bg-gray-50 border-b">
+                                    <td class="py-2 px-4"><strong>Konum Verisi</strong> (GPS Bilgileri)</td>
+                                    <td class="py-2 px-4">Kurye takip hizmetinin temelini oluşturmak ve zaman damgalı <strong>Sicil Kaydı (Audit Log)</strong> oluşturarak hukuki güvence sağlamak.</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2 px-4"><strong>İşlem Güvenliği Verisi</strong> (Log Kayıtları)</td>
+                                    <td class="py-2 px-4">Yasal yükümlülüklerin yerine getirilmesi ve sistem denetimlerinin sağlanması.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3 class="text-xl font-bold text-takip-gri mt-6 mb-3">3. Kişisel Verilerin Aktarılması</h3>
+                    <p class="text-gray-700">Kişisel verileriniz, yasal zorunluluklar dışında üçüncü kişilere aktarılmamaktadır. Ancak, hizmetin yurt dışında barındırılması durumunda (bulut bilişim/sunucu hizmetleri) verileriniz yurt dışına aktarılabilir.</p>
+
+                    <h3 class="text-xl font-bold text-takip-gri mt-6 mb-3">4. İlgili Kişinin (Veri Sahibinin) Hakları</h3>
+                    <p class="mb-4">KVKK'nın 11. maddesi uyarınca veri sahibi olarak, Şirketimize başvurarak aşağıdaki haklara sahipsiniz:</p>
+                    <ul class="list-disc list-inside space-y-2 text-gray-700 ml-4">
+                        <li>Kişisel verinizin işlenip işlenmediğini öğrenme,</li>
+                        <li>Verileriniz işlenmişse buna ilişkin bilgi talep etme,</li>
+                        <li>Verilerin işlenme amacını ve amacına uygun kullanılıp kullanılmadığını öğrenme,</li>
+                        <li>Verilerin düzeltilmesini ve silinmesini talep etme.</li>
+                    </ul>
+                    <p class="text-gray-700 mt-4">Bu hakları kullanmak için iletişim adresimiz üzerinden bize yazılı olarak başvurabilirsiniz.</p>
+                `
+            }
+        };
+
+        // Scroll animasyonları
+        document.addEventListener('DOMContentLoaded', function() {
+            const fadeElements = document.querySelectorAll('.fade-in');
+            
+            const fadeInObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && !entry.target.classList.contains('visible')) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            fadeElements.forEach(element => {
+                fadeInObserver.observe(element);
+            });
+            
+            // Form gönderimi
+            window.handleFormSubmit = function(event) {
+                event.preventDefault();
+                
+                const button = event.target.querySelector('button[type="submit"]');
+                const originalText = button.textContent;
+                
+                button.textContent = 'Gönderiliyor...';
+                button.disabled = true;
+                
+                setTimeout(() => {
+                    button.textContent = 'Talebiniz Alındı!';
+                    button.classList.remove('bg-takip-sari', 'hover:bg-yellow-500');
+                    button.classList.add('bg-green-500', 'text-white');
+                    
+                    setTimeout(() => {
+                        button.textContent = originalText;
+                        button.disabled = false;
+                        button.classList.remove('bg-green-500', 'text-white');
+                        button.classList.add('bg-takip-sari', 'hover:bg-yellow-500');
+                        event.target.reset();
+                    }, 3000);
+                }, 1500);
+            };
+
+            // Modal Yönetimi
+            const modalOverlay = document.getElementById('legal-modal-overlay');
+            const modalTitle = document.getElementById('modal-title');
+            const modalBody = document.getElementById('modal-body-content');
+
+            // Modalı açar ve içeriği yükler
+            window.openLegalModal = function(type) {
+                const content = legalContents[type];
+                
+                if (content) {
+                    modalTitle.textContent = content.title;
+                    modalBody.innerHTML = content.content;
+                    
+                    // Modalı aktif et
+                    modalOverlay.classList.add('active');
+                    // Sayfa kaydırmayı engelle
+                    document.body.style.overflow = 'hidden';
+                }
+            };
+
+            // Modalı kapatır
+            window.closeLegalModal = function() {
+                modalOverlay.classList.remove('active');
+                // Sayfa kaydırmayı serbest bırak
+                document.body.style.overflow = '';
+                
+                // İçeriği temizle (performans için opsiyonel)
+                setTimeout(() => {
+                    modalTitle.textContent = '';
+                    modalBody.innerHTML = '';
+                }, 300);
+            };
+
+            // Modal dışına tıklandığında kapatma
+            modalOverlay.addEventListener('click', function(e) {
+                // Modal içeriğine tıklanmadıysa kapat
+                if (e.target.id === 'legal-modal-overlay') {
+                    closeLegalModal();
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
