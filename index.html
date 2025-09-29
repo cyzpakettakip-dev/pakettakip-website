@@ -319,51 +319,64 @@
         </div>
     </section>
 
-    <!-- 6. İLETİŞİM FORMU -->
-    <section id="contact" class="py-16 md:py-20 bg-white">
-        <div class="container mx-auto px-4 md:px-6">
-            <h2 class="text-3xl md:text-4xl font-bold text-center text-takip-gri mb-12 fade-in">Kurumsal Demo Talebi</h2>
-            <div class="max-w-xl mx-auto bg-takip-bg p-8 md:p-10 rounded-xl shadow-2xl fade-in">
-                <p class="text-center text-gray-600 mb-6 font-semibold">Kurumsal hesap yöneticimiz en kısa sürede sizinle iletişime geçecektir.</p>
-                
-               <form action="https://formcarry.com/s/KHse9noKMoB" 
-      method="POST"
-      accept-charset="UTF-8"
-      onsubmit="handleFormSubmit(event)">
 
-    <!-- Firma Adı -->
-    <div class="mb-4">
-        <label for="firmaAdi" class="block text-sm font-medium text-gray-700">Firma Adı</label>
-        <input type="text" id="firmaAdi" name="firmaAdi" required 
-               class="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm p-3 focus:ring-takip-sari focus:border-takip-sari transition duration-300">
-    </div>
-    
-    <!-- E-posta -->
-    <div class="mb-4">
-        <label for="eposta" class="block text-sm font-medium text-gray-700">Kurumsal E-postanız</label>
-        <input type="email" id="eposta" name="eposta" required 
-               class="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm p-3 focus:ring-takip-sari focus:border-takip-sari transition duration-300">
-    </div>
-    
-    <!-- Kurye Sayısı -->
-    <div class="mb-6">
-        <label for="kuryeSayisi" class="block text-sm font-medium text-gray-700">Tahmini Kurye Sayısı</label>
-        <input type="number" id="kuryeSayisi" name="kuryeSayisi" required 
-               class="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm p-3 focus:ring-takip-sari focus:border-takip-sari transition duration-300" min="1">
-    </div>
-    
-    <!-- Gizli Field'lar -->
-    <input type="hidden" name="_gotcha">
-    <input type="hidden" name="_subject" value="🚀 PaketTakip Yeni Demo Talebi">
-    
-    <!-- Submit Butonu -->
-    <button type="submit" class="w-full bg-takip-sari text-takip-gri font-bold py-3 rounded-lg hover:bg-yellow-500 transition duration-300 shadow-lg text-lg transform hover:scale-105">
-        Demo Talebini Gönder
-    </button>
-</form>
-            </div>
+<!-- 6. İLETİŞİM FORMU - BASİT VERSİYON -->
+<section id="contact" class="py-16 md:py-20 bg-white">
+    <div class="container mx-auto px-4 md:px-6">
+        <h2 class="text-3xl md:text-4xl font-bold text-center text-takip-gri mb-12 fade-in">Kurumsal Demo Talebi</h2>
+        <div class="max-w-xl mx-auto bg-takip-bg p-8 md:p-10 rounded-xl shadow-2xl fade-in">
+            <p class="text-center text-gray-600 mb-6 font-semibold">Kurumsal hesap yöneticimiz en kısa sürede sizinle iletişime geçecektir.</p>
+            
+            <!-- BASİT FORM - FORMSPREE İLE -->
+            <form action="https://formspree.io/f/xjvqjvjg" method="POST">
+                <!-- Firma Adı -->
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Firma Adı</label>
+                    <input type="text" name="firma" required 
+                           class="w-full border border-gray-300 rounded-lg p-3 focus:ring-takip-sari focus:border-takip-sari transition duration-300"
+                           placeholder="Firma adınızı yazın">
+                </div>
+                
+                <!-- E-posta -->
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">E-posta</label>
+                    <input type="email" name="email" required 
+                           class="w-full border border-gray-300 rounded-lg p-3 focus:ring-takip-sari focus:border-takip-sari transition duration-300"
+                           placeholder="ornek@firma.com">
+                </div>
+                
+                <!-- Telefon -->
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Telefon</label>
+                    <input type="tel" name="telefon" 
+                           class="w-full border border-gray-300 rounded-lg p-3 focus:ring-takip-sari focus:border-takip-sari transition duration-300"
+                           placeholder="05XX XXX XX XX">
+                </div>
+                
+                <!-- Mesaj -->
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Mesajınız</label>
+                    <textarea name="mesaj" rows="4"
+                              class="w-full border border-gray-300 rounded-lg p-3 focus:ring-takip-sari focus:border-takip-sari transition duration-300"
+                              placeholder="Ek bilgi veya sorularınız..."></textarea>
+                </div>
+                
+                <!-- Gizli Alan -->
+                <input type="hidden" name="_subject" value="🚀 PaketTakip Yeni Demo Talebi">
+                
+                <!-- Gönder Butonu -->
+                <button type="submit" 
+                        class="w-full bg-takip-sari text-takip-gri font-bold py-3 rounded-lg hover:bg-yellow-500 transition duration-300 shadow-lg text-lg">
+                    Demo Talebini Gönder
+                </button>
+            </form>
+            
+            <p class="text-center text-gray-500 text-sm mt-4">
+                Form gönderildikten sonra yönlendirileceksiniz.
+            </p>
         </div>
-    </section>
+    </div>
+</section>
 
     <!-- 7. İLETİŞİM BİLGİLERİ (MOBİLDE ALT ALTA HİZALANIR) -->
     <section class="bg-takip-gri py-12 md:py-16 text-white">
