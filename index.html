@@ -326,24 +326,41 @@
             <div class="max-w-xl mx-auto bg-takip-bg p-8 md:p-10 rounded-xl shadow-2xl fade-in">
                 <p class="text-center text-gray-600 mb-6 font-semibold">Kurumsal hesap yöneticimiz en kısa sürede sizinle iletişime geçecektir.</p>
                 
-                <form onsubmit="handleFormSubmit(event)">
-                    <div class="mb-4">
-                        <label for="firmaAdi" class="block text-sm font-medium text-gray-700">Firma Adı</label>
-                        <input type="text" id="firmaAdi" name="firmaAdi" required class="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm p-3 focus:ring-takip-sari focus:border-takip-sari transition duration-300">
-                    </div>
-                    <div class="mb-4">
-                        <label for="eposta" class="block text-sm font-medium text-gray-700">Kurumsal E-postanız</label>
-                        <input type="email" id="eposta" name="eposta" required class="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm p-3 focus:ring-takip-sari focus:border-takip-sari transition duration-300">
-                    </div>
-                    <div class="mb-6">
-                        <label for="kuryeSayisi" class="block text-sm font-medium text-gray-700">Tahmini Kurye Sayısı</label>
-                        <input type="number" id="kuryeSayisi" name="kuryeSayisi" required class="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm p-3 focus:ring-takip-sari focus:border-takip-sari transition duration-300" min="1">
-                    </div>
-                    
-                    <button type="submit" class="w-full bg-takip-sari text-takip-gri font-bold py-3 rounded-lg hover:bg-yellow-500 transition duration-300 shadow-lg text-lg transform hover:scale-105">
-                        Demo Talebini Gönder
-                    </button>
-                </form>
+               <form action="https://formcarry.com/s/KHse9noKMoB" 
+      method="POST"
+      accept-charset="UTF-8"
+      onsubmit="handleFormSubmit(event)">
+
+    <!-- Firma Adı -->
+    <div class="mb-4">
+        <label for="firmaAdi" class="block text-sm font-medium text-gray-700">Firma Adı</label>
+        <input type="text" id="firmaAdi" name="firmaAdi" required 
+               class="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm p-3 focus:ring-takip-sari focus:border-takip-sari transition duration-300">
+    </div>
+    
+    <!-- E-posta -->
+    <div class="mb-4">
+        <label for="eposta" class="block text-sm font-medium text-gray-700">Kurumsal E-postanız</label>
+        <input type="email" id="eposta" name="eposta" required 
+               class="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm p-3 focus:ring-takip-sari focus:border-takip-sari transition duration-300">
+    </div>
+    
+    <!-- Kurye Sayısı -->
+    <div class="mb-6">
+        <label for="kuryeSayisi" class="block text-sm font-medium text-gray-700">Tahmini Kurye Sayısı</label>
+        <input type="number" id="kuryeSayisi" name="kuryeSayisi" required 
+               class="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm p-3 focus:ring-takip-sari focus:border-takip-sari transition duration-300" min="1">
+    </div>
+    
+    <!-- Gizli Field'lar -->
+    <input type="hidden" name="_gotcha">
+    <input type="hidden" name="_subject" value="🚀 PaketTakip Yeni Demo Talebi">
+    
+    <!-- Submit Butonu -->
+    <button type="submit" class="w-full bg-takip-sari text-takip-gri font-bold py-3 rounded-lg hover:bg-yellow-500 transition duration-300 shadow-lg text-lg transform hover:scale-105">
+        Demo Talebini Gönder
+    </button>
+</form>
             </div>
         </div>
     </section>
