@@ -128,23 +128,25 @@
 </head>
 <body class="bg-takip-bg antialiased font-sans">
 
-    <!-- 1. HEADER / NAVİGASYON (MOBİLDE SADE) -->
-    <header class="bg-white shadow-lg sticky top-0 z-50 transition-all duration-300">
-        <div class="container mx-auto px-4 md:px-6 py-4 flex justify-between items-center">
-            <!-- Logo Alanı -->
-            <div class="flex items-center space-x-3">
-                <div class="relative">
-                    <i class="fas fa-route text-takip-sari text-3xl"></i>
-                    <div class="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full pulse-glow"></div>
-                </div>
-                <span class="text-2xl md:text-3xl font-extrabold text-takip-gri">PaketTakip</span>
+  
+<!-- 1. HEADER / NAVİGASYON -->
+<header class="bg-white shadow-lg sticky top-0 z-50 transition-all duration-300">
+    <div class="container mx-auto px-4 md:px-6 py-4 flex justify-between items-center">
+        <!-- Logo Alanı - ANA SAYFAYA LİNK EKLENDİ -->
+        <a href="#" class="flex items-center space-x-3">
+            <div class="relative">
+                <i class="fas fa-route text-takip-sari text-3xl"></i>
+                <div class="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full pulse-glow"></div>
             </div>
-            <!-- Demo Talep Butonu -->
-            <a href="#contact" class="bg-takip-sari text-takip-gri font-bold py-2 px-4 md:px-6 rounded-full hover:bg-yellow-500 transition duration-300 shadow-md text-sm md:text-base transform hover:scale-105">
-                Demo Talep Et
-            </a>
-        </div>
-    </header>
+            <span class="text-2xl md:text-3xl font-extrabold text-takip-gri">PaketTakip</span>
+        </a>
+        
+        <!-- Demo Talep Butonu -->
+        <a href="#contact" class="bg-takip-sari text-takip-gri font-bold py-2 px-4 md:px-6 rounded-full hover:bg-yellow-500 transition duration-300 shadow-md text-sm md:text-base transform hover:scale-105">
+            Demo Talep Et
+        </a>
+    </div>
+</header>
 
     <!-- 2. HERO SECTION (ANA BAŞLIK) -->
     <main class="py-16 md:py-24">
@@ -415,9 +417,9 @@
     </button>
 </form>
             
-            <p class="text-center text-gray-500 text-sm mt-4">
-                Form gönderildikten sonra yönlendirileceksiniz.
-            </p>
+<p class="text-center text-gray-500 text-sm mt-4">
+    Form gönderildikten sonra ana sayfaya yönlendirileceksiniz.
+</p>
         </div>
     </div>
 </section>
@@ -634,7 +636,8 @@
             });
             
 
-// GÜNCELLENMİŞ handleFormSubmit
+
+// GÜNCELLENMİŞ handleFormSubmit - ANA SAYFAYA SCROLL
 window.handleFormSubmit = function(event) {
     event.preventDefault();
     
@@ -663,6 +666,14 @@ window.handleFormSubmit = function(event) {
             
             // Formu temizle
             form.reset();
+            
+            // ANA SAYFAYA SCROLL ET
+            setTimeout(() => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            }, 1000);
             
             // 5 saniye sonra butonu eski haline getir
             setTimeout(() => {
