@@ -576,30 +576,55 @@
                 fadeInObserver.observe(element);
             });
             
-            // Form gönderimi
-            window.handleFormSubmit = function(event) {
-                event.preventDefault();
-                
-                const button = event.target.querySelector('button[type="submit"]');
-                const originalText = button.textContent;
-                
-                button.textContent = 'Gönderiliyor...';
-                button.disabled = true;
-                
-                setTimeout(() => {
-                    button.textContent = 'Talebiniz Alındı!';
-                    button.classList.remove('bg-takip-sari', 'hover:bg-yellow-500');
-                    button.classList.add('bg-green-500', 'text-white');
-                    
-                    setTimeout(() => {
-                        button.textContent = originalText;
-                        button.disabled = false;
-                        button.classList.remove('bg-green-500', 'text-white');
-                        button.classList.add('bg-takip-sari', 'hover:bg-yellow-500');
-                        event.target.reset();
-                    }, 3000);
-                }, 1500);
-            };
+// Form gönderimi - DÜZELTİLMİŞ VERSİYON
+window.handleFormSubmit = function(event) {
+    event.preventDefault();
+    
+    const form = event.target;
+    const button = form.querySelector('button[type="submit"]');
+    const originalText = button.textContent;
+    
+    // Butonu disable et
+    button.textContent = 'Gönderiliyor...';
+    button.disabled = true;
+    
+    // FORM CARRY'YE GERÇEK GÖNDERİM
+    fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: {
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            // Başarılı - FormCarry'ye iletildi
+            button.textContent = 'Talebiniz Alındı! 🎉';
+            button.classList.remove('bg-takip-sari', 'hover:bg-yellow-500');
+            button.classList.add('bg-green-500', 'text-white');
+            form.reset();
+            
+            // FormCarry dashboard'da görünecek
+            console.log('FormCarry başarıyla gönderildi!');
+        } else {
+            throw new Error('Form gönderilemedi');
+        }
+    })
+    .catch(error => {
+        // Hata durumu
+        button.textContent = 'Tekrar Deneyin';
+        console.error('Form error:', error);
+    })
+    .finally(() => {
+        // Butonu resetle
+        setTimeout(() => {
+            button.textContent = originalText;
+            button.disabled = false;
+            button.classList.remove('bg-green-500', 'text-white');
+            button.classList.add('bg-takip-sari', 'hover:bg-yellow-500');
+        }, 3000);
+    });
+};
 
             // Modal Yönetimi
             const modalOverlay = document.getElementById('legal-modal-overlay');
